@@ -1,5 +1,5 @@
 import express from 'express'
-import { userRouter } from './router'
+import { authRouter, userRouter } from './router'
 
 const app = express()
 
@@ -10,5 +10,6 @@ app.use(express.json())
 app.disable('x-powered-by')
 
 app.use('/user', userRouter)
+app.use('/auth', authRouter)
 
 export default app
