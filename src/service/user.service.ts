@@ -19,3 +19,11 @@ export const findUserCreatedByEmail = async (email: string): Promise<User | null
     return null
   }
 }
+
+export const findUserById = async (id: number): Promise<User | null > => {
+  try {
+    return await prisma.user.findFirst({ where: { id } })
+  } catch (error) {
+    return null
+  }
+}

@@ -22,3 +22,7 @@ export const postLogin = async (req: Request<unknown, unknown, LoginSchema>, res
     console.log(error)
   }
 }
+
+export const getVerifyToken = (req: Request, res: Response): void => {
+  res.status(200).json({ message: 'Token valido' })
+}
