@@ -1,11 +1,13 @@
 import express from 'express'
-import { authRouter, userRouter } from './router'
 import morgan from 'morgan'
+import cors from 'cors'
+import { authRouter, userRouter } from './router'
 
 const app = express()
 
 app.use(morgan('dev'))
 
+app.use(cors())
 // json config
 app.use(express.json())
 
