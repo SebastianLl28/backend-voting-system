@@ -23,4 +23,15 @@ model User {
   email    String // @unique
   password String
   state    State  @default(ACTIVE)
+  polls    Poll[]
+}
+
+model Poll {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  titulo      String
+  created_at  DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  finish_date DateTime?
+  user        User      @relation(fields: [userId], references: [id])
 }
