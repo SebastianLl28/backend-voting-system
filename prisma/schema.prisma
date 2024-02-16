@@ -24,6 +24,7 @@ model User {
   password String
   state    State  @default(ACTIVE)
   polls    Poll[]
+  votes    Vote[]
 }
 
 model Poll {
@@ -38,8 +39,27 @@ model Poll {
 }
 
 model Question {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   description String
   pollId      Int
-  poll        Poll   @relation(fields: [pollId], references: [id])
+  poll        Poll     @relation(fields: [pollId], references: [id])
+  options     Option[]
+}
+
+model Option {
+  id          Int      @id @default(autoincrement())
+  description String
+  questionId  Int
+  question    Question @relation(fields: [questionId], references: [id])
+  votes       Vote[]
+}
+
+model Vote {
+  optionId Int
+  option   Option   @relation(fields: [optionId], references: [id])
+  userId   Int
+  user     User     @relation(fields: [userId], references: [id])
+  createAt DateTime @default(now())
+
+  @@id([optionId, userId])
 }
