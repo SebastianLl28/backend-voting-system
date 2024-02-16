@@ -16,7 +16,11 @@ export const jwtValidator = async (req: Request, res: Response, next: NextFuncti
       res.status(401).json({ message: 'Token no válido' })
       return
     }
-    req.body.user = findUser.id
+    req.body.user = {
+      id: findUser.id,
+      name: findUser.name,
+      email: findUser.email
+    }
     next()
   } catch (error) {
     res.status(401).json({

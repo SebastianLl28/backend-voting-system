@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { LoginSchema } from '../schema/auth.schema'
 import { findUserCreatedByEmail } from '../service/user.service'
 import { generateToken } from '../helpers/jwt'
+import { RequestUser } from '../interface/Request'
 
 export const postLogin = async (req: Request<unknown, unknown, LoginSchema>, res: Response): Promise<void> => {
   try {
@@ -23,6 +24,6 @@ export const postLogin = async (req: Request<unknown, unknown, LoginSchema>, res
   }
 }
 
-export const getVerifyToken = (req: Request, res: Response): void => {
+export const getVerifyToken = (req: Request<unknown, unknown, RequestUser>, res: Response): void => {
   res.status(200).json({ message: 'Token valido' })
 }
