@@ -11,7 +11,7 @@ const swaggerDefinition: OAS3Definition = {
     schemas: {
       Poll: {
         type: 'object',
-        required: ['title', 'userId'],
+        required: ['id', 'title', 'userId', 'create_at', 'uptadateAt'],
         properties: {
           id: { type: 'number' },
           userId: { type: 'number' },
@@ -20,6 +20,18 @@ const swaggerDefinition: OAS3Definition = {
           create_at: { type: 'string', format: 'date-time' },
           uptadateAt: { type: 'string', format: 'date-time' },
           finish_date: { type: 'string', format: 'date-time' }
+        }
+      },
+      User: {
+        type: 'object',
+        required: ['id', 'name', 'lastName', 'email', 'password', 'state'],
+        properties: {
+          id: { type: 'number' },
+          name: { type: 'string' },
+          lastName: { type: 'string' },
+          email: { type: 'string' },
+          password: { type: 'string' },
+          state: { type: 'string', enum: ['ACTIVE', 'INACTIVE', 'DELETED'], default: 'ACTIVE' }
         }
       }
     },
