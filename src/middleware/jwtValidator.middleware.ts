@@ -5,15 +5,23 @@ import { findUserById } from '../service/user.service'
 
 export const jwtValidator = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const token = req.header('token') as string
-    if (token === null) {
+    const authorizationHeader = req.header('Authorization') as string
+    if (authorizationHeader === null) {
       res.status(401).json({ message: 'No hay token en la petición' })
       return
     }
+
+    if (!authorizationHeader.startsWith('Bearer ')) {
+      res.status(401).json({ message: 'token invalido' })
+      return
+    }
+
+    const token = authorizationHeader.replace('Bearer ', '').trim()
+
     const { id } = verifyToken(token)
     const findUser = await findUserById(id)
     if (findUser === null) {
-      res.status(401).json({ message: 'Token no válido' })
+      res.status(401).json({ message: 'token invalido' })
       return
     }
     req.body.user = {
@@ -24,7 +32,7 @@ export const jwtValidator = async (req: Request, res: Response, next: NextFuncti
     next()
   } catch (error) {
     res.status(401).json({
-      message: 'Token no válido'
+      message: 'token invalido'
     })
   }
 }

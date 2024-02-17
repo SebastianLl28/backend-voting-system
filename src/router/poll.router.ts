@@ -14,7 +14,7 @@ const router = Router()
  *       - Poll
  *     summary: Create a poll
  *     security:
- *       - headerScurity: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -69,7 +69,7 @@ router.post('/', jwtValidator, schemaValidator(createPollSchema), postPoll)
  *       - Poll
  *     summary: Get polls by user
  *     security:
- *       - headerScurity: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get Polls By User Success

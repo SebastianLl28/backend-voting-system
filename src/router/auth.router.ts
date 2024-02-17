@@ -60,7 +60,7 @@ router.post('/login', schemaValidator(loginSchema), postLogin)
  *       - Auth
  *     summary: Verify Token
  *     security:
- *       - headerScurity: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Verify Token Success

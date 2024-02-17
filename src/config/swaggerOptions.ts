@@ -24,10 +24,10 @@ const swaggerDefinition: OAS3Definition = {
       }
     },
     securitySchemes: {
-      headerScurity: {
-        type: 'apiKey',
-        in: 'header',
-        name: 'token'
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT'
       }
     }
   }

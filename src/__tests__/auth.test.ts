@@ -71,4 +71,23 @@ describe('AUTH', () => {
       ])
     })
   })
+
+  describe('GET /auth/verify', () => {
+    it('should respond with a 200 status code', async () => {
+      const response = await request(app).get('/auth/verify').set('Authorization', `Bearer ${process.env.TEST_TOKEN as string}`)
+      expect(response.statusCode).toBe(200)
+    })
+
+    it('should respond with a 401 status code if the token is invalid', async () => {
+      const response = await request(app).get('/auth/verify').set('Authorization', 'Bearer ' + 'invalid_token')
+      expect(response.statusCode).toBe(401)
+      expect(response.body.message).toBe('token invalido')
+    })
+
+    it('should respond with a 401 status code if the token is missing', async () => {
+      const response = await request(app).get('/auth/verify')
+      expect(response.statusCode).toBe(401)
+      expect(response.body.message).toBe('token invalido')
+    })
+  })
 })
