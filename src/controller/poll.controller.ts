@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import { RequestUser } from '../interface/Request'
-import { CreatePollSchema } from '../schema/poll.schema'
-import { createPoll, findAllPollsByUser } from '../service/poll.service'
+import { CreatePollSchema, GetPollByIdSchema, ResolvePollSchema, ResolvePollSchemaParams } from '../schema/poll.schema'
+import { createPoll, findAllPollsByUser, findPollById } from '../service/poll.service'
 import { createQuestion } from '../service/question.service'
 import { createOption } from '../service/option.service'
+import { createManyVotes } from '../service/vote.service'
+import { findUserById } from '../service/user.service'
 
 interface PostPollBody extends RequestUser, CreatePollSchema {}
 export const postPoll = async (req: Request<unknown, unknown, PostPollBody>, res: Response): Promise<void> => {
@@ -45,5 +47,50 @@ export const getPollsByUser = async (req: Request<unknown, unknown, RequestUser>
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Error al obtener encuestas' })
+  }
+}
+
+export const getPollById = async (req: Request<GetPollByIdSchema, unknown, RequestUser>, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params
+    if (id === undefined) {
+      res.status(400).json({ message: 'Error al obtener encuesta' })
+      return
+    }
+    const poll = await findPollById(parseInt(req.params.id))
+    if (poll === null) {
+      res.status(404).json({ message: 'Encuesta no encontrada' })
+    }
+    res.status(200).json({ ...poll })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Error al obtener encuesta' })
+  }
+}
+
+interface postPollSolveBody extends RequestUser, ResolvePollSchema {}
+export const postPollSolve = async (req: Request<ResolvePollSchemaParams, unknown, postPollSolveBody>, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params
+    if (id === undefined) {
+      res.status(400).json({ message: 'Error al resolver encuesta' })
+      return
+    }
+    const poll = await findPollById(parseInt(req.params.id))
+    if (poll === null) {
+      res.status(404).json({ message: 'Encuesta no encontrada' })
+      return
+    }
+    const user = await findUserById(req.body.user.id)
+    if (user === null) {
+      res.status(404).json({ message: 'Usuario no encontrado' })
+      return
+    }
+    await createManyVotes(user.id, req.body.options)
+    console.log(req.body)
+    res.status(200).json({ message: 'Encuesta resuelta correctamente' })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Error al resolver encuesta' })
   }
 }

@@ -27,3 +27,22 @@ export const findAllPollsByUser = async (id: number): Promise< Poll[] | null> =>
     return null
   }
 }
+
+export const findPollById = async (id: number): Promise<Poll | null> => {
+  try {
+    return await prisma.poll.findUnique({
+      where: {
+        id
+      },
+      include: {
+        questions: {
+          include: {
+            options: true
+          }
+        }
+      }
+    })
+  } catch (error) {
+    return null
+  }
+}
