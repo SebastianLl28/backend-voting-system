@@ -17,7 +17,7 @@ export const postLogin = async (req: Request<unknown, unknown, LoginSchema>, res
       return
     }
     const token = generateToken({ id: findEmail.id, email: findEmail.email, name: findEmail.name })
-    res.status(200).json({ token })
+    res.status(200).json({ token, message: 'Inicio de sesión exitoso' })
   } catch (error) {
     res.status(500).json({ message: 'Error interno del servidor' })
     console.log(error)
